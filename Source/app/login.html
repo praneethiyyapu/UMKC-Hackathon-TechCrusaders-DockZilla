@@ -1,0 +1,161 @@
+<html lang="en">
+<head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="13956783939-ovoqpbjm5odahbh7udcqdtocqfb6ioml.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<title>
+		Log In
+	</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <style type="text/css">
+	#mainDiv{
+		width:600px;
+		#background-color:red;
+		margin:0 auto;
+		font-family:helvetica;
+		font-size:1.2em;
+	}
+	input{
+		width:250px;
+		height:30px;
+		padding:5px;
+		border-radius:5px;
+		font-size:1em;
+		border:1px solid grey;
+		margin-bottom:10px;
+	}
+	label{
+		padding-top:10px;
+		width:200px;
+		float:left;
+		color:#333333;
+		
+	
+	}
+	#SubmitButton{
+		margin-top:10px;
+		margin-left:200px;
+		height:45px;
+		width:265px;	
+		font-size:1em;
+		color:#FFD8CB;
+	    background-color:#5B74A8;
+		position:relative;
+		bottom:45px;
+		
+	}
+    #errorDiv{
+		color:red;
+		font-family:helvetica;
+		font-size:1.2em;
+	}
+	#textDiv{
+		position:relative;
+		left:250px;
+		color:#333333;
+		bottom:50px;
+		}
+	#RegisterButton{
+		margin-top:10px;
+		margin-left:200px;
+		height:45px;
+		width:265px;	
+		font-size:1em;
+		color:#FFD8CB;
+	    background-color:#68A253;
+		position:relative;
+		bottom:50px;
+	#google{
+		position:relative;
+		right:200px;
+	}
+	
+</style>
+</head>
+<body>
+<body bgcolor="#EDF0F5">
+	<div id="errorDiv"></div>
+	<div id ="mainDiv">
+	<form id="validationForm">
+		<label for ="uname"> Username</label>
+		<input name="uname" id="uname"/>	
+		<label for ="password"> Password</label>
+		
+		<input type="password" name="password" id="password"/>
+		<div id="google" class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+		
+		
+		<input id="SubmitButton" type ="submit" value="Log In"/>
+		
+	</form>
+	<div id="textDiv">Don't have an account?</div>
+	
+	<input id="RegisterButton" type ="submit" value="Register"/>
+	
+	<div id="textDiv"><a href= "Reset.html" />Reset your password</div>
+	
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script>
+		$("#validationForm").submit(function(event){
+			var error="";
+			event.preventDefault();
+			if ($("#uname").val()==""){
+			error=error+"</br>Please enter a username";}
+			if ($("#password").val()==""){
+			error=error+"</br>Please enter a password";}
+			else{
+			}
+			$("#errorDiv").html(error);
+			$.ajax({
+                type: "GET",
+                url: "https://api.mongolab.com/api/1/databases/umkcdb/collections/labrecords/?apiKey=LwXMI0A5YY5a1Oww9yCBc7UdlzCFWpA2",
+                dataType: "json",
+				success: function (data) {
+					
+					if ($("#password").val()!="" && $("#uname").val()!=""){
+					for(i=0; i<data.length;i++){
+					if(data[i].username == $("#uname").val() && data[i].password == $("#password").val()){
+						alert("Login Success");
+						window.location.href = "Dockzilla.html";
+					}
+					}
+					}
+					//alert("Username and password do not match")
+					}
+					
+				});
+			
+		});
+		
+		$("#RegisterButton").click(function(event){
+			window.location.href = "Register.html";
+			
+		});
+		
+		
+		
+	
+		
+
+	</script>
+	
+<script>
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId());
+        console.log("Name: " + profile.getName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+
+    };
+</script>
+
+</body>
+
+
+</body>
+</html>

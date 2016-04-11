@@ -1,0 +1,174 @@
+<!doctype html>
+
+<head>
+<script type="text/javascript">
+
+var monthtext=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
+
+function populatedropdown(dayfield, monthfield, yearfield){
+var today=new Date()
+var dayfield=document.getElementById(dayfield)
+var monthfield=document.getElementById(monthfield)
+var yearfield=document.getElementById(yearfield)
+for (var i=0; i<=31; i++)
+dayfield.options[i]=new Option(i, i+1)
+dayfield.options[today.getDate()]=new Option(today.getDate(), today.getDate(), true, true) //select today's day
+for (var m=0; m<12; m++)
+monthfield.options[m]=new Option(monthtext[m], monthtext[m])
+monthfield.options[today.getMonth()]=new Option(monthtext[today.getMonth()], monthtext[today.getMonth()], true, true) //select today's month
+var thisyear=today.getFullYear()
+for (var y=100; y>0; y--){
+yearfield.options[y]=new Option(thisyear, thisyear)
+thisyear-=1
+}
+yearfield.options[0]=new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
+}
+
+</script>
+	<title>
+		Register
+	</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<style type="text/css">
+
+	#mainDiv{
+		width:600px;
+		#background-color:red;
+		margin:0 auto;
+		font-family:helvetica;
+		font-size:1.2em;
+	}
+	input{
+		width:250px;
+		height:30px;
+		padding:5px;
+		border-radius:5px;
+		font-size:1em;
+		border:1px solid grey;
+		margin-bottom:10px;
+	}
+	label{
+		padding-top:10px;
+		width:200px;
+		float:left;
+		color:#333333;
+		
+	
+	}
+	#SubmitButton{
+		margin-top:10px;
+		margin-left:200px;
+		height:45px;
+		width:2	65px;	
+		font-size:1em;
+		color:#FFD8CB;
+	    background-color:#68A253;
+	}
+    #errorDiv{
+		color:red;
+		font-family:helvetica;
+		font-size:1.2em;
+	}
+	select{
+		margin-top:10px;
+	}
+	#daydropdown{
+		margin-left:40px;
+	}
+	
+</style>
+</head>
+
+<body bgcolor="#EDF0F5">
+	<div id="errorDiv"></div>
+	<div id ="mainDiv">
+	<form id="validationForm">
+		<label for ="fname"> First Name</label>
+		<input name="fname" id="fname"/>
+		<label for ="lname"> Last Name</label>
+		<input name="lname" id="lname"/>
+		<label for ="email"> Email</label>
+		<input name="email" id="email"/>
+		<label for ="telephone"> Telephone</label>
+		<input name="telephone" id="telephone"/>
+		<label for ="password"> Password</label>
+		<input type="password" name="password" id="password"/> 
+		<label for ="pass">Confirm Password</label>
+		<input type="password" name="pass" id="pass"/> 
+		<br/>
+		<label> Date of Birth	</label>
+		<select id="daydropdown"></select> 
+        <select id="monthdropdown"></select>
+        <select id="yeardropdown"></select>
+		
+		<input id="SubmitButton" type ="submit" value="Register"/>
+		
+
+<script type="text/javascript">
+window.onload=function(){
+populatedropdown("daydropdown", "monthdropdown", "yeardropdown")
+}
+</script>
+	</div>	
+
+	<script>
+		$("#validationForm").submit(function(event){
+			var error="";
+			event.preventDefault();
+			
+			function isValidEmailAddress(emailAddress) {
+            var pattern = /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+            return pattern.test(emailAddress);
+			
+			};
+		    
+		    if (!isValidEmailAddress($("#email").val())){
+			error="Please enter a valid email address";}
+			
+			if (!$.isNumeric($("#telephone").val())){
+			error=error+"</br>Please enter a valid telephone number";}
+			
+			if ($("#password").val()!=$("#pass").val()){
+			error=error+"</br>Passwords do not match";}
+			$.ajax({
+                type: "GET",
+                url: "https://api.mongolab.com/api/1/databases/umkcdb/collections/labrecords/?apiKey=LwXMI0A5YY5a1Oww9yCBc7UdlzCFWpA2",
+                dataType: "json",
+				success: function (data) {
+					for(i=0; i<data.length;i++){
+					if(data[i].username == $("#email").val()){
+						error="Username already exists, please try a new username";
+						}
+						break;
+						}
+						if(error==""){
+							$.ajax({
+							type: "POST",
+							url: "https://api.mongolab.com/api/1/databases/umkcdb/collections/labrecords/?apiKey=LwXMI0A5YY5a1Oww9yCBc7UdlzCFWpA2",
+							dataType: "json",
+							contentType: "application/json",
+							data: JSON.stringify({
+							"first_name": $("#fname").val(),
+							"last_name": $("#lname").val(),
+							"username": $("#email").val(),
+							"telephone_number": $("#telephone").val(),
+							"password": $("#password").val()})
+						});
+							alert("Registration successful! Redirecting to Log in page")
+							window.location.href ="login.html"
+							}
+							$("#errorDiv").html(error);
+					//}
+					//}
+					}
+				});
+			
+		});
+		
+
+	</script>
+	
+	
+</body>
+
